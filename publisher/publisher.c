@@ -19,6 +19,7 @@ int main(){
 	printf("Type 'close' to stop publisher\n"); 
 	
 	while(1){
+		//парсинг ввода
 		printf("Enter command:\n");
 		char *s = calloc(sizeof(char), BUFF_SIZE);
 		fgets(s, BUFF_SIZE, stdin);
@@ -32,7 +33,8 @@ int main(){
 			*pspace = '\0';
 			pmessage = pspace + 1;
 		}		
-				
+		
+		//обработка команд, отправка сообщения
 		if (strcmp(pcommand, "send") == 0){
 			printf("Sending '%s'\n", pmessage);
 			assert(zmq_send(socket, pmessage, strlen(pmessage), 0) > 0);
