@@ -18,10 +18,10 @@ int main(){
 	printf("Type send 'meesage' to send 'message' to the listener\n");
 	printf("Type 'close' to stop publisher\n"); 
 	
+	char *s = calloc(sizeof(char), BUFF_SIZE);
 	while(1){
 		//парсинг ввода
 		printf("Enter command:\n");
-		char *s = calloc(sizeof(char), BUFF_SIZE);
 		fgets(s, BUFF_SIZE, stdin);
 		s[strcspn(s, "\n")] = '\0';
 		
@@ -37,7 +37,9 @@ int main(){
 		//обработка команд, отправка сообщения
 		if (strcmp(pcommand, "send") == 0){
 			printf("Sending '%s'\n", pmessage);
-			assert(zmq_send(socket, pmessage, strlen(pmessage), 0) > 0);
+			if(zmq_send(socket, pmessage, strlen(pmessage), 0) <= 0){
+				printf("Failed to send message\n");
+			}
 		} else if (strcmp(pcommand, "close") == 0){
 			printf("Terminating\n");
 			zmq_close(socket);
